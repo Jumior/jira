@@ -63,6 +63,8 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
@@ -138,22 +140,40 @@ module.exports = function (webpackEnv) {
         },
       },
     ].filter(Boolean);
+    // if (preProcessor) {
+    //   loaders.push(
+    //     {
+    //       loader: require.resolve('resolve-url-loader'),
+    //       options: {
+    //         sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
+    //         root: paths.appSrc,
+    //       },
+    //     },
+    //     {
+    //       loader: require.resolve(preProcessor),
+    //       options: {
+    //         sourceMap: true,
+    //       },
+    //     }
+    //   );
+    // }
     if (preProcessor) {
-      loaders.push(
-        {
-          loader: require.resolve('resolve-url-loader'),
+      let loader = require.resolve(preProcessor)
+      if(preProcessor === 'less-loader'){
+        loader = {
+          loader,
           options: {
-            sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
-            root: paths.appSrc,
-          },
-        },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
+             // 如果使用less-loader@5，请移除 lessOptions 这一级直接配置选项。
+            modifyVars: {
+              'primary-color': '#1890FF',
+              'link-color': '#1890FF',
+              'border-radius-base': '3px',
+            },
+            javascriptEnabled: true,
           },
         }
-      );
+      }
+      loaders.push(loader);
     }
     return loaders;
   };
@@ -420,6 +440,11 @@ module.exports = function (webpackEnv) {
                       },
                     },
                   ],
+                  ['import', {
+                    libraryName: 'antd',
+                    libraryDirectory: 'es',
+                    style: true
+                  }],
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
                     require.resolve('react-refresh/babel'),
@@ -495,6 +520,35 @@ module.exports = function (webpackEnv) {
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
               }),
+            },
+            {
+              test: lessRegex,
+              exclude: lessModuleRegex,
+              use: getStyleLoaders({
+                importLoaders: 1,
+                sourceMap: isEnvProduction && shouldUseSourceMap,
+              },
+              'less-loader'
+              ),
+              // Don't consider CSS imports dead code even if the
+              // containing package claims to have no side effects.
+              // Remove this when webpack adds a warning or an error for this.
+              // See https://github.com/webpack/webpack/issues/6571
+              sideEffects: true,
+            },
+            // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
+            // using the extension .module.css
+            {
+              test: lessModuleRegex,
+              use: getStyleLoaders({
+                importLoaders: 1,
+                sourceMap: isEnvProduction && shouldUseSourceMap,
+                modules: {
+                  getLocalIdent: getCSSModuleLocalIdent,
+                },
+              },
+              'less-loader'
+              ),
             },
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the

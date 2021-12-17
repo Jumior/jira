@@ -3,6 +3,7 @@ import { cleanObject, useMount, useDebounce } from "../../utils";
 import { List } from "./List"
 import { Search } from "./Search"
 import { useHttp } from "../../utils/http";
+import styled from "@emotion/styled";
 
 export const ProjectList = () => {
     const [param, setParam] = useState({
@@ -21,8 +22,13 @@ export const ProjectList = () => {
     useMount(() => {
         client('users').then(setUsers)
     })
-    return <div>
+    return <Container>
+        <h1>项目列表</h1>
         <Search param={param} setParam={setParam} users={users} />
         <List list={list} users={users} />
-    </div>
+    </Container>
 }
+
+const Container = styled.div`
+  padding:3.2rem;
+`;

@@ -38,7 +38,7 @@ export const List = ({ list, users }: ListProps) => {
             </span>
         }
     }]
-    return <Table pagination={false} columns={columns} dataSource={list} />
+    return <Table rowKey="id" pagination={false} columns={columns} dataSource={list} />
 
 }
 

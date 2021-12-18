@@ -3,7 +3,7 @@ import { ProjectList } from "../../components/ProjectList/Index";
 import { Row } from "../../components/Styles/lib";
 import { useAuth } from "../../context/auth-context";
 import { ReactComponent as SoftwareLogo } from "../../assets/svg/software-logo.svg"
-import { Dropdown, Menu } from "antd";
+import { Button, Dropdown, Menu } from "antd";
 
 
 export const Home = () => {
@@ -20,13 +20,11 @@ export const Home = () => {
                     <Dropdown overlay={
                         <Menu>
                             <Menu.Item key={'logout'}>
-                                <a onClick={logout}>登出</a>
+                                <Button type="link" onClick={logout}>登出</Button>
                             </Menu.Item>
                         </Menu>}
                     >
-                        <a onClick={evt => evt.preventDefault()}>
-                            Hi，{user?.name}
-                        </a>
+                        <Button type="link" onClick={evt => evt.preventDefault()}>Hi，{user?.name}</Button>
                     </Dropdown>
                 </HeaderRight>
             </Header>

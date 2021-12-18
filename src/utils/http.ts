@@ -42,12 +42,12 @@ export const useHttp = () => {
     return (...[url, config]: Parameters<typeof http>) => http(url, { ...config, token: user?.token })
 }
 // ts utility type
-interface Person {
-    name: string;
-    age: number;
-}
-const a: Partial<Person> = {} //Partial 允许传入部分属性
-type PersonOnlyAge = Omit<Person, 'name'>//Omit 传入删除指定属性后的属性
-type PersonKeys = keyof Person
-type PersonOnlyName = Pick<Person, 'name'>//Pick 传入指定属性
-type Age = Exclude<PersonKeys, 'name'>
+// interface Person {
+//     name: string;
+//     age: number;
+// }
+// const a: Partial<Person> = {} //Partial 允许传入部分属性
+// type PersonOnlyAge = Omit<Person, 'name'>//Omit 传入删除指定属性后的属性
+// type PersonKeys = keyof Person
+// type PersonOnlyName = Pick<Person, 'name'>//Pick 传入指定属性
+// type Age = Exclude<PersonKeys, 'name'>

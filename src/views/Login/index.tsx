@@ -8,7 +8,7 @@ import right from "../../assets/svg/right.svg"
 
 export const Login = () => {
     const [isRegister, setIsRegister] = useState(false)
-    const { user, login, register } = useAuth()
+    const { login, register } = useAuth()
     const handleSubmit = (values: { username: string; password: string; }) => {
         if (isRegister) {
             register(values)
@@ -24,7 +24,7 @@ export const Login = () => {
                 <Title>
                     {isRegister ? '请注册' : '请登录'}
                 </Title>
-          
+
                 <Form onFinish={handleSubmit}>
                     <Form.Item name="username" rules={[{ required: true, message: '请输入用户名' }]}>
                         <Input placeholder="用户名" type="text" id="username" />
@@ -36,7 +36,7 @@ export const Login = () => {
                         <LongButton style={{ marginRight: 30 }} htmlType="submit" type="primary">{isRegister ? '注册' : '登录'}</LongButton>
                     </Form.Item>
                     <Divider />
-                    <a onClick={() => setIsRegister(!isRegister)}>{isRegister ? '已经有账号了？直接登录' : '没有账号？注册新账号'}</a>
+                    <Button onClick={() => setIsRegister(!isRegister)} type="link">{isRegister ? '已经有账号了？直接登录' : '没有账号？注册新账号'}</Button>
                 </Form>
             </ShadowCard>
         </Container>

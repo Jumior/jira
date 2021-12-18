@@ -7,21 +7,26 @@ import {
  * @param {*} param 
  * @returns 
  */
-const isFalsy = (param: unknown) => param === 0 ? false : !param
+export const isFalsy = (param: unknown) => param === 0 ? false : !param
+
+/**
+ * @description 判断void
+ * @param param 
+ * @returns
+ */
+ export const isVoid = (param: unknown) => param === undefined || param === null || param === ''
 
 /**
  * @description 清除对象内为false的属性
  * @param {*} object 
  * @returns
  */
-export const cleanObject = (object: object) => {
+export const cleanObject = (object: { [key: string]: unknown }) => {
     const result = Object.assign({}, object)
     for (const key in result) {
         if (Object.hasOwnProperty.call(result, key)) {
-            // @ts-ignore
             const element = result[key];
-            if (isFalsy(element)) {
-                // @ts-ignore
+            if (isVoid(element)) {
                 delete result[key]
             }
         }
@@ -39,6 +44,7 @@ export const useMount = (effect: () => void, cleanup?: () => void) => {
         return () => {
             cleanup && cleanup()
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 }
 /**
